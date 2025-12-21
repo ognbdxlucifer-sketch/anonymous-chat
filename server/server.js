@@ -1,3 +1,6 @@
+require("dotenv").config(); // ✅ LOAD ENV FIRST
+
+
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
@@ -22,8 +25,8 @@ const io = new Server(server, {
 // =========================
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.error("MongoDB error:", err));
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch((err) => console.error("❌ MongoDB error:", err));
 
 // =========================
 // USER MODEL
@@ -169,9 +172,9 @@ io.on("connection", (socket) => {
 });
 
 // =========================
-// START SERVER (RENDER SAFE)
+// START SERVER
 // =========================
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log("Server running on port", PORT);
+  console.log("🚀 Server running on port", PORT);
 });
