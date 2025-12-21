@@ -1,5 +1,5 @@
-// 🔥 LOCAL SERVER (change to Render URL later)
-const socket = io("http://127.0.0.1:3000");
+// 🔥 RENDER BACKEND URL
+const socket = io("https://anonymous-chat-backend-4v20.onrender.com");
 
 // =====================
 // DOM
@@ -216,14 +216,14 @@ function openPrivateChat(socketId, username) {
 }
 
 // =====================
-// BACK TO PUBLIC CHAT
+// BACK TO PUBLIC CHAT (GLOBAL ✅)
 // =====================
-function backToPublic() {
+window.backToPublic = function () {
   currentChat = "public";
   activePrivateSocketId = null;
   chatTitle.innerText = "Public Chat";
   messages.innerHTML = "";
-}
+};
 
 // =====================
 // PRIVATE CHAT LIST
@@ -236,7 +236,7 @@ function updatePrivateList() {
     let text = chat.username;
 
     if (chat.unread > 0) {
-      text = text + " (" + chat.unread + ")";
+      text += " (" + chat.unread + ")";
     }
 
     li.innerText = text;
