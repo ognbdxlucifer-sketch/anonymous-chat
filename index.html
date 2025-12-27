@@ -5,31 +5,25 @@
   <title>Anonymous Chat App</title>
   <link rel="stylesheet" href="./style.css" />
 
-  <!-- =====================
-       GOOGLE ADSENSE SCRIPT (ADD YOUR ID AFTER APPROVAL)
-  ===================== -->
-  <!--
+  <!-- Google AdSense -->
   <script async
-    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7926907122314665"
     crossorigin="anonymous"></script>
-  -->
 </head>
 <body>
 
 <!-- =====================
-     TOP BANNER AD (AFTER APPROVAL)
+     TOP BANNER AD
 ===================== -->
-<!--
 <ins class="adsbygoogle"
      style="display:block; text-align:center; margin-bottom:10px;"
-     data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+     data-ad-client="ca-pub-7926907122314665"
      data-ad-slot="1111111111"
      data-ad-format="auto"
      data-full-width-responsive="true"></ins>
 <script>
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
--->
 
 <!-- =====================
      AUTH SCREEN
@@ -37,7 +31,6 @@
 <div id="authBox">
   <h2>Welcome</h2>
 
-  <!-- REGISTER -->
   <div class="auth-section">
     <h3>Register</h3>
     <input id="regUsername" type="text" placeholder="Username" />
@@ -47,7 +40,6 @@
 
   <hr />
 
-  <!-- LOGIN -->
   <div class="auth-section">
     <h3>Login</h3>
     <input id="loginUsername" type="text" placeholder="Username" />
@@ -70,7 +62,6 @@
 
   <div class="container">
 
-    <!-- LEFT PANEL -->
     <div class="users">
       <h3>Online Users</h3>
       <ul id="usersList"></ul>
@@ -78,34 +69,23 @@
       <h3>Private Chats</h3>
       <ul id="privateList"></ul>
 
-      <!-- =====================
-           SIDEBAR AD (AFTER APPROVAL)
-      ===================== -->
-      <!--
+      <!-- Sidebar Ad -->
       <div style="margin-top:15px;">
         <ins class="adsbygoogle"
              style="display:block"
-             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+             data-ad-client="ca-pub-7926907122314665"
              data-ad-slot="2222222222"></ins>
         <script>
           (adsbygoogle = window.adsbygoogle || []).push({});
         </script>
       </div>
-      -->
     </div>
 
-    <!-- RIGHT PANEL -->
     <div class="chat">
       <h3 id="chatTitle">Public Chat</h3>
-
       <div id="messages"></div>
 
-      <input
-        id="msg"
-        type="text"
-        placeholder="Type message..."
-        autocomplete="off"
-      />
+      <input id="msg" type="text" placeholder="Type message..." autocomplete="off"/>
 
       <div style="margin-top:10px;">
         <button onclick="sendMessage()">Send</button>
@@ -121,9 +101,6 @@
   <a href="privacy.html" target="_blank">Privacy Policy</a>
 </div>
 
-<!-- =====================
-     SCRIPTS
-===================== -->
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script src="./script.js"></script>
 
