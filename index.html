@@ -3,31 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <title>Anonymous Chat App</title>
-  <link rel="stylesheet" href="./style.css" />
 
-  <!-- Google AdSense -->
+  <!-- Google AdSense verification script -->
   <script async
     src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7926907122314665"
     crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
 
-<!-- =====================
-     TOP BANNER AD
-===================== -->
-<ins class="adsbygoogle"
-     style="display:block; text-align:center; margin-bottom:10px;"
-     data-ad-client="ca-pub-7926907122314665"
-     data-ad-slot="1111111111"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-(adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
-<!-- =====================
-     AUTH SCREEN
-===================== -->
 <div id="authBox">
   <h2>Welcome</h2>
 
@@ -48,11 +33,7 @@
   </div>
 </div>
 
-<!-- =====================
-     CHAT APP
-===================== -->
 <div id="chatApp" style="display:none;">
-
   <h2>Chat App</h2>
 
   <p>
@@ -61,38 +42,22 @@
   </p>
 
   <div class="container">
-
     <div class="users">
       <h3>Online Users</h3>
       <ul id="usersList"></ul>
-
       <h3>Private Chats</h3>
       <ul id="privateList"></ul>
-
-      <!-- Sidebar Ad -->
-      <div style="margin-top:15px;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-7926907122314665"
-             data-ad-slot="2222222222"></ins>
-        <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
     </div>
 
     <div class="chat">
       <h3 id="chatTitle">Public Chat</h3>
       <div id="messages"></div>
-
       <input id="msg" type="text" placeholder="Type message..." autocomplete="off"/>
-
       <div style="margin-top:10px;">
         <button onclick="sendMessage()">Send</button>
         <button onclick="backToPublic()">Public Chat</button>
       </div>
     </div>
-
   </div>
 </div>
 
