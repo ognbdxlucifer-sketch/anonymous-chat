@@ -1,22 +1,122 @@
 body {
-  font-family: Arial;
-  background: #f4f4f4;
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  background: #0f172a;
+  color: #e5e7eb;
+}
+
+h2, h3 {
+  color: #38bdf8;
+  margin-bottom: 5px;
+}
+
+#authBox, #chatApp {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #020617;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.4);
+}
+
+.auth-section input, #msg {
+  width: 100%;
+  padding: 10px;
+  margin: 6px 0;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  background: #020617;
+  color: #fff;
+  border: 1px solid #1e293b;
+}
+
+button {
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: none;
+  background: #38bdf8;
+  color: #020617;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #0ea5e9;
 }
 
 .container {
   display: flex;
-  gap: 20px;
+  gap: 15px;
 }
 
-.users, .chat {
-  background: white;
+.users {
+  width: 30%;
+  background: #020617;
+  border-radius: 10px;
   padding: 10px;
-  border: 1px solid #ccc;
+}
+
+.chat {
+  width: 70%;
 }
 
 #messages {
-  height: 250px;
+  height: 350px;
   overflow-y: auto;
-  border: 1px solid #ddd;
+  background: #020617;
+  border-radius: 10px;
+  padding: 10px;
   margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* CHAT BUBBLES */
+.message {
+  max-width: 70%;
+  padding: 8px 12px;
+  border-radius: 10px;
+  margin: 6px 0;
+  font-size: 14px;
+  word-wrap: break-word;
+}
+
+.message.you {
+  background: #38bdf8;
+  color: #020617;
+  margin-left: auto;
+  text-align: right;
+}
+
+.message.other {
+  background: #1e293b;
+  color: #e5e7eb;
+  margin-right: auto;
+  text-align: left;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+ul li {
+  padding: 6px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+ul li:hover {
+  background: #1e293b;
+}
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .users, .chat {
+    width: 100%;
+  }
 }

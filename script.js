@@ -1,5 +1,5 @@
 // =====================
-// AUTO BACKEND DETECTION (LOCAL + RENDER)
+// AUTO BACKEND DETECTION
 // =====================
 const BACKEND_URL =
   location.hostname === "localhost" || location.hostname === "127.0.0.1"
@@ -31,7 +31,7 @@ const chatTitle = document.getElementById("chatTitle");
 // =====================
 let myUsername = "";
 let sessionToken = localStorage.getItem("sessionToken");
-let currentChat = "public"; // public | private
+let currentChat = "public";
 let activePrivateSocketId = null;
 let privateChats = {};
 
@@ -39,36 +39,28 @@ let privateChats = {};
 // AUTO LOGIN
 // =====================
 socket.on("connect", () => {
-  if (sessionToken) {
-    socket.emit("auto_login", sessionToken);
-  }
+  if (sessionToken) socket.emit("auto_login", sessionToken);
 });
 
 // =====================
 // AUTH
 // =====================
 window.register = function () {
-  const username = regUsername.value.trim();
-  const password = regPassword.value.trim();
-
-  if (!username || !password) {
-    alert("Enter username & password");
-    return;
-  }
-
-  socket.emit("register", { username, password });
+  if (!regUsername.value || !regPassword.value) return alert("Fill all fields");
+  socket.emit("register", {
+    username: regUsername.value.trim(),
+    password: regPassword.value.trim(),
+  });
 };
 
 window.login = function () {
-  const username = loginUsername.value.trim();
-  const password = loginPassword.value.trim();
+  if (!loginUsername.value || !loginPassword.value)
+    return alert("Fill all fields");
 
-  if (!username || !password) {
-    alert("Enter username & password");
-    return;
-  }
-
-  socket.emit("login", { username, password });
+  socket.emit("login", {
+    username: loginUsername.value.trim(),
+    password: loginPassword.value.trim(),
+  });
 };
 
 window.logout = function () {
@@ -79,10 +71,6 @@ window.logout = function () {
 // =====================
 // AUTH RESPONSES
 // =====================
-socket.on("register_success", (msg) => {
-  alert(msg);
-});
-
 socket.on("login_success", ({ username, token }) => {
   myUsername = username;
   sessionToken = token;
@@ -93,80 +81,52 @@ socket.on("login_success", ({ username, token }) => {
   chatApp.style.display = "block";
 });
 
-socket.on("logout_success", () => {
-  myUsername = "";
-  sessionToken = null;
-  currentChat = "public";
-  activePrivateSocketId = null;
-  privateChats = {};
-
-  messages.innerHTML = "";
-  usersList.innerHTML = "";
-  privateList.innerHTML = "";
-  chatTitle.innerText = "Public Chat";
-
-  chatApp.style.display = "none";
-  authBox.style.display = "block";
-});
-
-socket.on("auth_error", (msg) => {
-  alert(msg);
-});
+socket.on("logout_success", () => location.reload());
+socket.on("auth_error", (m) => alert(m));
 
 // =====================
-// ONLINE USERS
+// USERS
 // =====================
 socket.on("online_users", (users) => {
   usersList.innerHTML = "";
-
   users.forEach((u) => {
-    if (!u.username || u.username === myUsername) return;
-
-    const li = document.createElement("li");
-    li.innerText = u.username;
-    li.onclick = () => openPrivateChat(u.socketId, u.username);
-    usersList.appendChild(li);
+    if (u.username !== myUsername) {
+      const li = document.createElement("li");
+      li.innerText = u.username;
+      li.onclick = () => openPrivateChat(u.socketId, u.username);
+      usersList.appendChild(li);
+    }
   });
 });
 
 // =====================
-// PUBLIC CHAT
+// RECEIVE PUBLIC MESSAGE
 // =====================
 socket.on("public_message", (d) => {
   if (currentChat === "public" && d.from !== myUsername) {
-    messages.innerHTML +=
-      "<p><b>" + d.from + ":</b> " + d.message + "</p>";
+    messages.innerHTML += `<div class="message other">${d.message}</div>`;
+    messages.scrollTop = messages.scrollHeight;
   }
 });
 
 // =====================
-// PRIVATE CHAT RECEIVE
+// RECEIVE PRIVATE MESSAGE
 // =====================
 socket.on("private_message", (d) => {
-  const socketId = d.socketId;
-
-  if (!privateChats[socketId]) {
-    privateChats[socketId] = {
-      username: d.from,
-      messages: [],
-      unread: 0,
-      socketId: socketId,
-    };
+  if (!privateChats[d.socketId]) {
+    privateChats[d.socketId] = { username: d.from, messages: [], unread: 0 };
   }
 
-  privateChats[socketId].messages.push({
-    from: d.from,
-    text: d.message,
-  });
+  privateChats[d.socketId].messages.push({ from: d.from, text: d.message });
 
-  if (currentChat !== "private" || activePrivateSocketId !== socketId) {
-    privateChats[socketId].unread++;
+  if (activePrivateSocketId !== d.socketId) {
+    privateChats[d.socketId].unread++;
     updatePrivateList();
     return;
   }
 
-  messages.innerHTML +=
-    "<p><b>" + d.from + ":</b> " + d.message + "</p>";
+  messages.innerHTML += `<div class="message other">${d.message}</div>`;
+  messages.scrollTop = messages.scrollHeight;
 });
 
 // =====================
@@ -182,74 +142,47 @@ window.sendMessage = function () {
       toSocketId: activePrivateSocketId,
       message: msgInput.value,
     });
-
     privateChats[activePrivateSocketId].messages.push({
       from: "You",
       text: msgInput.value,
     });
   }
 
-  messages.innerHTML +=
-    "<p><b>You:</b> " + msgInput.value + "</p>";
+  messages.innerHTML += `<div class="message you">${msgInput.value}</div>`;
+  messages.scrollTop = messages.scrollHeight;
   msgInput.value = "";
 };
 
 // =====================
-// OPEN PRIVATE CHAT
+// PRIVATE CHAT
 // =====================
-function openPrivateChat(socketId, username) {
+function openPrivateChat(id, username) {
   currentChat = "private";
-  activePrivateSocketId = socketId;
-
-  if (!privateChats[socketId]) {
-    privateChats[socketId] = {
-      username: username,
-      messages: [],
-      unread: 0,
-      socketId: socketId,
-    };
-  }
-
-  privateChats[socketId].unread = 0;
-  chatTitle.innerText = "Private Chat with " + username;
+  activePrivateSocketId = id;
+  chatTitle.innerText = "Chat with " + username;
   messages.innerHTML = "";
+  privateChats[id].unread = 0;
 
-  privateChats[socketId].messages.forEach((m) => {
-    messages.innerHTML +=
-      "<p><b>" + m.from + ":</b> " + m.text + "</p>";
+  privateChats[id].messages.forEach((m) => {
+    messages.innerHTML += `<div class="message ${
+      m.from === "You" ? "you" : "other"
+    }">${m.text}</div>`;
   });
-
   updatePrivateList();
 }
 
-// =====================
-// BACK TO PUBLIC CHAT (GLOBAL)
-// =====================
 window.backToPublic = function () {
   currentChat = "public";
-  activePrivateSocketId = null;
   chatTitle.innerText = "Public Chat";
   messages.innerHTML = "";
 };
 
-// =====================
-// PRIVATE CHAT LIST
-// =====================
 function updatePrivateList() {
   privateList.innerHTML = "";
-
-  Object.values(privateChats).forEach((chat) => {
+  Object.values(privateChats).forEach((c) => {
     const li = document.createElement("li");
-    let text = chat.username;
-
-    if (chat.unread > 0) {
-      text += " (" + chat.unread + ")";
-    }
-
-    li.innerText = text;
-    li.onclick = () =>
-      openPrivateChat(chat.socketId, chat.username);
-
+    li.innerText = c.username + (c.unread ? ` (${c.unread})` : "");
+    li.onclick = () => openPrivateChat(c.socketId, c.username);
     privateList.appendChild(li);
   });
 }
